@@ -1,0 +1,44 @@
+import 'package:english_wordle/models/word_model.dart';
+import 'package:get_storage/get_storage.dart';
+
+class WordsBoxDB {
+  WordsBoxDB._();
+
+  static WordsBoxDB instance = WordsBoxDB._();
+
+  late final GetStorage _wordBox;
+
+  Future<void> initBox() async {
+    await GetStorage('words').initStorage;
+
+    _wordBox = GetStorage('words');
+  }
+
+  Future<void> storeTodaysWord(WordModel word) async {
+    await _wordBox.write(
+      'todaysWord',
+      {
+        'word': word.toJson(true),
+        'date': DateTime.now().toString(),
+        "hints": [...word.hints]
+      },
+    );
+  }
+
+  WordModel? get getTodaysWord {
+    final word = _wordBox.read('todaysWord') as Map<String, dynamic>?;
+
+    if (word == null) return null;
+
+    final DateTime? date = DateTime.tryParse(word['date']);
+
+    if (date == null) return null;
+
+    if (date.year == DateTime.now().year &&
+        date.day == DateTime.now().day &&
+        date.month == DateTime.now().month) {
+      return WordModel.fromJsonLocal(word['word']);
+    }
+    return null;
+  }
+}
