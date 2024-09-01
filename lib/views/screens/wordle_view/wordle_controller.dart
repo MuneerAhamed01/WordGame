@@ -145,8 +145,15 @@ class WordleController extends GetxController {
     update([reBuildKeyBord, reBuildIndicator]);
   }
 
-  WordTileType typeOfTheContainer(String value, int section) {
-    if (greenIn(section).contains(value)) return WordTileType.green;
+  WordTileType typeOfTheContainer(String value, int section, int index) {
+    if (greenIn(section).contains(value)) {
+      int indexOfThatWord = index % 5;
+
+      int indexInOurWord = todaysWord.indexOf(value);
+
+      if (indexOfThatWord == indexInOurWord) return WordTileType.green;
+      return WordTileType.none;
+    }
 
     if (orangeIn(section).contains(value)) return WordTileType.orange;
 

@@ -119,8 +119,10 @@ class WordleScreen extends GetView<WordleController> {
               return WordTile(
                 value: controller.typedValues.elementAtOrNull(index) ?? '',
                 tileType: controller.typeOfTheContainer(
-                    controller.typedValues.elementAtOrNull(index) ?? '',
-                    _getRangeValue(index)),
+                  controller.typedValues.elementAtOrNull(index) ?? '',
+                  _getRangeValue(index),
+                  index,
+                ),
               );
             },
           ),

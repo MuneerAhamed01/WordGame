@@ -69,7 +69,6 @@ Word difficulty: $wordDiff
   void onInit() async {
     super.onInit();
     const geminiKey = String.fromEnvironment('GEMINI_KEY');
-    print(geminiKey);
     geminiModel = GenerativeModel(
       model: 'gemini-1.5-flash',
       apiKey: geminiKey,
