@@ -41,4 +41,29 @@ class WordsBoxDB {
     }
     return null;
   }
+
+  Future<void> storeCurrentSataus(List<String> typedValues) async {
+    await _wordBox.write('typedValues', {
+      'date': DateTime.now().toString(),
+      'values': typedValues,
+    });
+  }
+
+  List<String> get getTypedValues {
+    final word = _wordBox.read('typedValues') as Map<String, dynamic>?;
+
+    if (word == null) return [];
+
+    final DateTime? date = DateTime.tryParse(word['date']);
+
+    if (date == null) return [];
+
+    if (date.year == DateTime.now().year &&
+        date.day == DateTime.now().day &&
+        date.month == DateTime.now().month) {
+      return List.from(word['values']);
+    }
+
+    return [];
+  }
 }

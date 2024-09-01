@@ -51,12 +51,16 @@ class ShakeWidgetState extends State<ShakeWidget>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: widget.duration,
+      duration: const Duration(milliseconds: 150),
     );
 
-    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
+    _animation = Tween<double>(begin: 0.0, end: -(1 / 4)).animate(
       CurvedAnimation(parent: _animationController, curve: widget.curve),
     );
+
+    _animationController.forward().then((e) {
+      _animationController.reverse();
+    });
   }
 
   @override
@@ -80,8 +84,9 @@ class ShakeWidgetState extends State<ShakeWidget>
       child: AnimatedBuilder(
         animation: _animation,
         builder: (context, child) {
-          return Transform.translate(
-            offset: Offset(widget.deltaX * _shake(_animation.value), 0),
+          return Transform.rotate(
+            // offset: Offset(widget.deltaX * _shake(_animation.value), 0),
+            angle: _animation.value,
             child: child,
           );
         },

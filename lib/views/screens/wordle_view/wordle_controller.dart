@@ -19,7 +19,7 @@ class WordleController extends GetxController {
 
   List<String> typedValues = [];
 
-  String todaysWord = 'FROGS';
+  String get todaysWord => word?.word ?? '';
 
   WordModel? word;
 
@@ -121,7 +121,11 @@ class WordleController extends GetxController {
   Future<void> _checkWithCurrentWord(List<String> wordFromTypledValues) async {
     for (String i in wordFromTypledValues) {
       if (todaysWord.contains(i)) {
-        if (todaysWord.indexOf(i) == wordFromTypledValues.indexOf(i)) {
+        final int indexOfTheWord = wordFromTypledValues.indexOf(i);
+
+        final valueAtTheIndex = todaysWord.split('')[indexOfTheWord];
+
+        if (valueAtTheIndex == i) {
           _greenWords[currentSection]?.add(i);
         } else {
           _orangeWords[currentSection]?.add(i);
@@ -141,7 +145,10 @@ class WordleController extends GetxController {
     }
 
     currentSection += 1;
-
+    if (currentSection == 6) {
+      // YOU CAN DO THE LOSS THE GAME OVER HERE
+      print('You loss word is $todaysWord');
+    }
     update([reBuildKeyBord, reBuildIndicator]);
   }
 
@@ -149,11 +156,14 @@ class WordleController extends GetxController {
     if (greenIn(section).contains(value)) {
       int indexOfThatWord = index % 5;
 
-      int indexInOurWord = todaysWord.indexOf(value);
+      String elementAtThatIndex =
+          todaysWord.split('').elementAt(indexOfThatWord);
+      print('value: $value  $index');
 
-      if (indexOfThatWord == indexInOurWord) return WordTileType.green;
+      if (value == elementAtThatIndex) return WordTileType.green;
       return WordTileType.none;
     }
+    print('value: $value  $index ');
 
     if (orangeIn(section).contains(value)) return WordTileType.orange;
 
@@ -179,8 +189,8 @@ class WordleController extends GetxController {
     if (myWord == null) {
       final todaysWord = await Get.find<WordsRepository>().getTodaysWord();
 
-      todaysWord.either((_) {
-        print('Word handling has some error');
+      todaysWord.either((e) {
+        print('Word handling has some error: ${e.error}');
         isLoading = false;
         update([reBuildScreen]);
       }, _assignTodaysWord);
@@ -212,9 +222,16 @@ class WordleController extends GetxController {
     // );
   }
 
+  Future<void> saveTypedValue() async {}
+
+  void getTypedValues() {
+    typedValues = WordsBoxDB.instance.getTypedValues;
+  }
+
   @override
   void onInit() {
     super.onInit();
-    // getTodaysWord();
+    getTypedValues();
+    getTodaysWord();
   }
 }
