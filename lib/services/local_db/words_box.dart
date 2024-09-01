@@ -42,10 +42,11 @@ class WordsBoxDB {
     return null;
   }
 
-  Future<void> storeCurrentSataus(List<String> typedValues) async {
+  Future<void> storeCurrentSataus(List<String> typedValues, int session) async {
     await _wordBox.write('typedValues', {
       'date': DateTime.now().toString(),
       'values': typedValues,
+      'currentSession': session,
     });
   }
 
@@ -65,5 +66,23 @@ class WordsBoxDB {
     }
 
     return [];
+  }
+
+  int get getCurrentSession {
+    final word = _wordBox.read('typedValues') as Map<String, dynamic>?;
+
+    if (word == null) return 1;
+
+    final DateTime? date = DateTime.tryParse(word['date']);
+
+    if (date == null) return 1;
+
+    if (date.year == DateTime.now().year &&
+        date.day == DateTime.now().day &&
+        date.month == DateTime.now().month) {
+      return word['currentSession'];
+    }
+
+    return 1;
   }
 }

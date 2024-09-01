@@ -158,7 +158,7 @@ class WordleScreen extends GetView<WordleController> {
           child: Padding(
             padding: const EdgeInsets.only(right: 24, top: 16),
             child: Text(
-              '${controller.currentSection} / 6',
+              '${controller.currentSection} / 5',
               style: Get.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Colors.white.withOpacity(0.7),

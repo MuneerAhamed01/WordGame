@@ -83,6 +83,7 @@ class WordleController extends GetxController {
       return;
     }
     typedValues.add(value);
+    saveTypedValue();
 
     update([reBuildCardId((typedValues.length - 1).toString())]);
   }
@@ -95,6 +96,7 @@ class WordleController extends GetxController {
       return;
     }
     typedValues.removeLast();
+    saveTypedValue();
 
     update([reBuildCardId((typedValues.length).toString())]);
   }
@@ -119,21 +121,7 @@ class WordleController extends GetxController {
   }
 
   Future<void> _checkWithCurrentWord(List<String> wordFromTypledValues) async {
-    for (String i in wordFromTypledValues) {
-      if (todaysWord.contains(i)) {
-        final int indexOfTheWord = wordFromTypledValues.indexOf(i);
-
-        final valueAtTheIndex = todaysWord.split('')[indexOfTheWord];
-
-        if (valueAtTheIndex == i) {
-          _greenWords[currentSection]?.add(i);
-        } else {
-          _orangeWords[currentSection]?.add(i);
-        }
-      } else {
-        _disabledWords[currentSection]?.add(i);
-      }
-    }
+    _addTheWords(wordFromTypledValues, currentSection);
 
     int start = (currentSection - 1) * 5;
 
@@ -152,6 +140,25 @@ class WordleController extends GetxController {
     update([reBuildKeyBord, reBuildIndicator]);
   }
 
+  void _addTheWords(List<String> wordFromTypledValues,
+      [int currentSection = 0]) {
+    for (int i = 0; i < wordFromTypledValues.length; i++) {
+      if (todaysWord.contains(wordFromTypledValues[i])) {
+        final int indexOfTheWord = i;
+
+        final valueAtTheIndex = todaysWord.split('')[indexOfTheWord];
+
+        if (valueAtTheIndex == wordFromTypledValues[i]) {
+          _greenWords[currentSection]?.add(wordFromTypledValues[i]);
+        } else {
+          _orangeWords[currentSection]?.add(wordFromTypledValues[i]);
+        }
+      } else {
+        _disabledWords[currentSection]?.add(wordFromTypledValues[i]);
+      }
+    }
+  }
+
   WordTileType typeOfTheContainer(String value, int section, int index) {
     if (greenIn(section).contains(value)) {
       int indexOfThatWord = index % 5;
@@ -163,7 +170,7 @@ class WordleController extends GetxController {
       if (value == elementAtThatIndex) return WordTileType.green;
       return WordTileType.none;
     }
-    print('value: $value  $index ');
+    print('value: $value  $index sd');
 
     if (orangeIn(section).contains(value)) return WordTileType.orange;
 
@@ -222,16 +229,39 @@ class WordleController extends GetxController {
     // );
   }
 
-  Future<void> saveTypedValue() async {}
+  Future<void> saveTypedValue() async {
+    WordsBoxDB.instance.storeCurrentSataus(typedValues, currentSection);
+  }
 
   void getTypedValues() {
     typedValues = WordsBoxDB.instance.getTypedValues;
+    currentSection = WordsBoxDB.instance.getCurrentSession;
+
+    int startRange = 0;
+    int endRange = 5;
+
+    int session = 1;
+
+    if (typedValues.length < endRange) return;
+
+    for (int i = 0; i < 5; i++) {
+      _addTheWords(
+        typedValues.getRange(startRange, endRange).toList(),
+        session,
+      );
+      startRange = endRange;
+      endRange = endRange + 5;
+      session++;
+    }
+    update([reBuildScreen]);
+    // int value = (typedValues.length / 5).floor() * 5;
   }
 
   @override
   void onInit() {
     super.onInit();
-    getTypedValues();
-    getTodaysWord();
+    getTodaysWord().then((e) {
+      getTypedValues();
+    });
   }
 }
