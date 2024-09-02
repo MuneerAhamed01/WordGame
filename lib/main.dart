@@ -15,6 +15,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await WordsBoxDB.instance.initBox();
+
   runApp(const MyApp());
 }
 

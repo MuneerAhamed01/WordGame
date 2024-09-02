@@ -1,3 +1,4 @@
+import 'package:english_wordle/controllers/audio_controller.dart';
 import 'package:english_wordle/views/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +12,7 @@ class CustomKeyboard extends StatefulWidget {
   final List<String> orangedList;
   final List<String> greenedList;
   final List<String> disabledList;
+  final AudioController controller;
 
   const CustomKeyboard({
     super.key,
@@ -20,6 +22,7 @@ class CustomKeyboard extends StatefulWidget {
     this.orangedList = const [],
     this.greenedList = const [],
     this.disabledList = const [],
+    required this.controller,
   });
 
   @override
@@ -32,22 +35,26 @@ class _CustomKeyboardState extends State<CustomKeyboard>
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(2.0).copyWith(bottom: 6),
-        child: InkWell(
-          onTap: () {
-            widget.onKeyPressed(key);
-          },
-          child: Container(
-            padding: const EdgeInsets.all(12.0),
-            decoration: BoxDecoration(
-              color: backgroundColor(key),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Center(
-              child: Text(
-                key,
-                style: Get.textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: textColor(key),
+        child: Material(
+          borderRadius: BorderRadius.circular(4),
+          color: backgroundColor(key),
+          child: InkWell(
+            onTap: () {
+              widget.controller.play();
+              widget.onKeyPressed(key);
+            },
+            child: Container(
+              padding: const EdgeInsets.all(12.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Center(
+                child: Text(
+                  key,
+                  style: Get.textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: textColor(key),
+                  ),
                 ),
               ),
             ),
@@ -62,20 +69,26 @@ class _CustomKeyboardState extends State<CustomKeyboard>
       flex: 2,
       child: Padding(
         padding: const EdgeInsets.all(2.0).copyWith(bottom: 6),
-        child: InkWell(
-          onTap: onPressed,
-          child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.all(12.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Text(
-              label,
-              style: Get.textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+        child: Material(
+          borderRadius: BorderRadius.circular(4),
+          color: Colors.white,
+          child: InkWell(
+            onTap: () {
+              widget.controller.play();
+              onPressed.call();
+            },
+            child: Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.all(12.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                label,
+                style: Get.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
             ),
           ),

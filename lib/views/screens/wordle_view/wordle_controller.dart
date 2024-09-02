@@ -1,8 +1,10 @@
 import 'dart:math';
 
+import 'package:english_wordle/controllers/audio_controller.dart';
 import 'package:english_wordle/models/word_model.dart';
 import 'package:english_wordle/services/apis/words_service.dart';
 import 'package:english_wordle/services/local_db/words_box.dart';
+import 'package:english_wordle/views/utils/audios.dart';
 import 'package:english_wordle/views/widgets/word_tile/word_tile.dart';
 import 'package:get/get.dart';
 
@@ -24,6 +26,8 @@ class WordleController extends GetxController {
   WordModel? word;
 
   bool isLoading = false;
+
+  late final AudioController audioController;
 
 // include in the [todaysWord] but not available at the correct position
   final Map<int, List<String>> _orangeWords = {
@@ -260,6 +264,7 @@ class WordleController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    audioController = AudioController(audio: Audios.clickAudioGame);
     getTodaysWord().then((e) {
       getTypedValues();
     });

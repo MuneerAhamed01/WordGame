@@ -135,6 +135,7 @@ class WordleScreen extends GetView<WordleController> {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               child: CustomKeyboard(
+                controller: controller.audioController,
                 onKeyPressed: controller.addTypedValue,
                 onBackspacePressed: controller.removeValue,
                 onEnterPressed: controller.onPressEnter,
