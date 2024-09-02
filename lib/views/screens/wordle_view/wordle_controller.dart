@@ -242,9 +242,9 @@ class WordleController extends GetxController {
 
     int session = 1;
 
-    if (typedValues.length < endRange) return;
-
     for (int i = 0; i < 5; i++) {
+      if (typedValues.length < endRange) break;
+
       _addTheWords(
         typedValues.getRange(startRange, endRange).toList(),
         session,
