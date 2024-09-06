@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:dictionaryx/dictionary_reduced_sa.dart';
 import 'package:english_wordle/controllers/audio_controller.dart';
 import 'package:english_wordle/models/word_model.dart';
 import 'package:english_wordle/services/apis/words_service.dart';
@@ -19,6 +20,8 @@ class WordleController extends GetxController {
 
   WordTileType type = WordTileType.none;
 
+  final DictionaryReducedSA dictnory = DictionaryReducedSA();
+
   List<String> typedValues = [];
 
   String get todaysWord => word?.word ?? '';
@@ -26,6 +29,8 @@ class WordleController extends GetxController {
   WordModel? word;
 
   bool isLoading = false;
+
+  bool isWinnedToday = false;
 
   late final AudioController audioController;
 
@@ -82,6 +87,7 @@ class WordleController extends GetxController {
 
   int currentSection = 1;
   void addTypedValue(String value) {
+    if (isWinnedToday) return;
     if (typedValues.length == (5 * currentSection)) {
       print('You have entered the 5th wordle please press enter');
       return;
@@ -93,6 +99,8 @@ class WordleController extends GetxController {
   }
 
   void removeValue() {
+    if (isWinnedToday) return;
+
     if (typedValues.isEmpty) return;
 
     if ((5 * (currentSection - 1) >= typedValues.length)) {
@@ -106,6 +114,8 @@ class WordleController extends GetxController {
   }
 
   void onPressEnter() {
+    if (isWinnedToday) return;
+
     if (typedValues.length == (5 * currentSection)) {
       _moveToTheNextSession();
     } else {
@@ -117,7 +127,14 @@ class WordleController extends GetxController {
     final value = typedValues
         .getRange(typedValues.length - 5, typedValues.length)
         .toList();
+
+    if (!dictnory.hasEntry(value.join().toLowerCase())) {
+      return _onWordError();
+    }
+
     if (value.join() == todaysWord) {
+      isWinnedToday = true;
+      // PERFOM THE WINNING ANOUNCEMENT
       _callWonTheGame(value.join());
     } else {
       _checkWithCurrentWord(value);
@@ -192,6 +209,10 @@ class WordleController extends GetxController {
     }
   }
 
+  void _onWordError() {
+    print('Typed word is not exist in the dictnory');
+  }
+
   Future<void> getTodaysWord() async {
     isLoading = true;
     update([reBuildScreen]);
@@ -248,7 +269,10 @@ class WordleController extends GetxController {
 
     for (int i = 0; i < 5; i++) {
       if (typedValues.length < endRange) break;
-
+      final word = typedValues.getRange(startRange, endRange).join('');
+      if (word == todaysWord) {
+        isWinnedToday = true;
+      }
       _addTheWords(
         typedValues.getRange(startRange, endRange).toList(),
         session,
@@ -266,7 +290,8 @@ class WordleController extends GetxController {
     super.onInit();
     audioController = AudioController(audio: Audios.clickAudioGame);
     getTodaysWord().then((e) {
-      getTypedValues();
+      // getTypedValues();
+      print(isWinnedToday);
     });
   }
 }
