@@ -77,23 +77,6 @@ class WordleScreen extends GetView<WordleController> {
             },
           ),
         ),
-        // const Spacer(),
-        // GetBuilder<WordleController>(
-        //   id: WordleController.reBuildKeyBord,
-        //   builder: (_) {
-        //     return Padding(
-        //       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        //       child: CustomKeyboard(
-        //         onKeyPressed: controller.addTypedValue,
-        //         onBackspacePressed: controller.removeValue,
-        //         onEnterPressed: controller.onPressEnter,
-        //         disabledList: controller.disabledValues,
-        //         greenedList: controller.greenValues,
-        //         orangedList: controller.orangeValues,
-        //       ),
-        //     );
-        //   },
-        // )
       ],
     );
   }
