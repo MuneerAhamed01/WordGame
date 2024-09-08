@@ -116,12 +116,12 @@ class WordleController extends GetxController {
   }
 
   void onPressEnter() {
-    shakeFirstFive();
     if (isWinnedToday) return;
 
     if (typedValues.length == (5 * currentSection)) {
       _moveToTheNextSession();
     } else {
+      shakeFirstFive();
       showTopSnackBar('This is new');
     }
   }
@@ -213,6 +213,7 @@ class WordleController extends GetxController {
   }
 
   void _onWordError() {
+    shakeFirstFive();
     print('Typed word is not exist in the dictnory');
   }
 
@@ -289,7 +290,35 @@ class WordleController extends GetxController {
   }
 
   shakeFirstFive() {
-    listOfShakeItems.values.first?.call();
+    final value = currentSessionIndex();
+    final items = listOfShakeItems.entries.where((v) {
+      return v.key <= value.$2 && v.key >= value.$1;
+    }).toList();
+    for (var v in items) {
+      v.value?.call();
+    }
+  }
+
+  (int start, int end) currentSessionIndex() {
+    if (currentSection == 1) {
+      return (0, 4);
+    }
+    if (currentSection == 2) {
+      return (5, 9);
+    }
+
+    if (currentSection == 3) {
+      return (10, 14);
+    }
+
+    if (currentSection == 4) {
+      return (15, 19);
+    }
+
+    if (currentSection == 5) {
+      return (20, 24);
+    }
+    return (0, 4);
   }
 
   @override

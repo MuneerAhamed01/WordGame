@@ -75,7 +75,7 @@ class ShakeWidgetState extends State<ShakeWidget>
 
   /// convert 0-1 to 0-1-0
   double _shake(double animation) =>
-      2 * (0.5 - (0.5 - widget.curve.transform(animation)).abs());
+      6 * (0.5 - (0.5 - widget.curve.transform(animation)).abs());
 
   @override
   Widget build(BuildContext context) {
