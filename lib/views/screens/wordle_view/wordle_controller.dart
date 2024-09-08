@@ -26,6 +26,8 @@ class WordleController extends GetxController {
 
   String get todaysWord => word?.word ?? '';
 
+  Map<int, Function?> listOfShakeItems = {};
+
   WordModel? word;
 
   bool isLoading = false;
@@ -114,6 +116,7 @@ class WordleController extends GetxController {
   }
 
   void onPressEnter() {
+    shakeFirstFive();
     if (isWinnedToday) return;
 
     if (typedValues.length == (5 * currentSection)) {
@@ -285,12 +288,16 @@ class WordleController extends GetxController {
     // int value = (typedValues.length / 5).floor() * 5;
   }
 
+  shakeFirstFive() {
+    listOfShakeItems.values.first?.call();
+  }
+
   @override
   void onInit() {
     super.onInit();
     audioController = AudioController(audio: Audios.clickAudioGame);
     getTodaysWord().then((e) {
-      // getTypedValues();
+      getTypedValues();
       print(isWinnedToday);
     });
   }

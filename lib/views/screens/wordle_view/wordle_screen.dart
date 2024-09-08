@@ -106,6 +106,11 @@ class WordleScreen extends GetView<WordleController> {
                   _getRangeValue(index),
                   index,
                 ),
+                shakeCallBack: (value) {
+                  if (controller.listOfShakeItems[index] == null) {
+                    controller.listOfShakeItems[index] = value;
+                  }
+                },
               );
             },
           ),

@@ -58,9 +58,9 @@ class ShakeWidgetState extends State<ShakeWidget>
       CurvedAnimation(parent: _animationController, curve: widget.curve),
     );
 
-    _animationController.forward().then((e) {
-      _animationController.reverse();
-    });
+    // _animationController.forward().then((e) {
+    //   _animationController.reverse();
+    // });
   }
 
   @override
