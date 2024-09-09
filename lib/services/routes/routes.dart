@@ -1,3 +1,5 @@
+import 'package:english_wordle/views/screens/auth/auth_bindings.dart';
+import 'package:english_wordle/views/screens/auth/auth_screen.dart';
 import 'package:english_wordle/views/screens/wordle_view/wordle_bindings.dart';
 import 'package:english_wordle/views/screens/wordle_view/wordle_screen.dart';
 import 'package:get/get.dart';
@@ -11,12 +13,12 @@ class Routes {
         transition: Transition.fadeIn,
         binding: WordleBindings(),
       ),
-      // GetPage(
-      //   name: RoutesName.signUp,
-      //   page: () => const SignUpScreen(),
-      //   transition: Transition.fadeIn,
-      //   binding: SignUpBindings(),
-      // ),
+      GetPage(
+        name: AuthScreen.routeName,
+        page: () => const AuthScreen(),
+        transition: Transition.fadeIn,
+        binding: AuthBindings(),
+      ),
       // GetPage(
       //   name: RoutesName.showcase,
       //   page: () => const ShowcasePage(),

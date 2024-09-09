@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 class WordleScreen extends GetView<WordleController> {
   const WordleScreen({super.key});
 
-  static const String routeName = '/';
+  static const String routeName = '/wordleScreen';
 
   @override
   Widget build(BuildContext context) {

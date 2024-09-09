@@ -7,12 +7,12 @@ class ColorPopUpContainer extends StatefulWidget {
   final Duration duration;
 
   const ColorPopUpContainer({
-    Key? key,
+    super.key,
     required this.color,
     this.size = 100,
     required this.child,
     this.duration = const Duration(milliseconds: 500),
-  }) : super(key: key);
+  });
 
   @override
   _ColorPopUpContainerState createState() => _ColorPopUpContainerState();
