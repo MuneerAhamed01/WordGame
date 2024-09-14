@@ -7,6 +7,7 @@ import 'package:english_wordle/services/apis/spell_service.dart';
 import 'package:english_wordle/services/apis/words_service.dart';
 import 'package:english_wordle/services/local_db/words_box.dart';
 import 'package:english_wordle/views/utils/audios.dart';
+import 'package:english_wordle/views/widgets/winning_bottom_sheet.dart';
 import 'package:english_wordle/views/widgets/word_tile/word_tile.dart';
 import 'package:get/get.dart';
 
@@ -285,6 +286,7 @@ class WordleController extends GetxController {
       final word = typedValues.getRange(startRange, endRange).join('');
       if (word == todaysWord) {
         isWinnedToday = true;
+        _winnerBottomSheet();
       }
       _addTheWords(
         typedValues.getRange(startRange, endRange).toList(),
@@ -328,6 +330,17 @@ class WordleController extends GetxController {
       return (20, 24);
     }
     return (0, 4);
+  }
+
+  void _winnerBottomSheet() {
+    Get.bottomSheet(
+      isScrollControlled: true,
+      enableDrag: false,
+      isDismissible: false,
+      WinnerBottomSheet(
+        todayWord: todaysWord,
+      ),
+    );
   }
 
   @override

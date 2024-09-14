@@ -86,6 +86,13 @@ class WordleScreen extends GetView<WordleController> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const SizedBox(height: 50),
+        // const AnimatedCheckmarkAvatar(
+        //   size: 100,
+        //   checkmarkColor: Colors.white,
+        //   backgroundColor: Colors.green,
+        //   checkmarkDuration: Duration(milliseconds: 1000),
+        //   zoomDuration: Duration(milliseconds: 500),
+        // ),
         GridView.builder(
           itemCount: 5 * 5,
           padding: const EdgeInsets.symmetric(horizontal: 24),
