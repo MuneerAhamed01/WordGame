@@ -57,7 +57,7 @@ class _AppButtonState extends State<AppButton> {
   Widget build(BuildContext context) {
     return AnimatedOpacity(
       opacity: _opacity,
-      duration: const Duration(milliseconds: 50),
+      duration: const Duration(milliseconds: 200),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         // splashColor:
@@ -72,7 +72,7 @@ class _AppButtonState extends State<AppButton> {
                 widget.onTap?.call();
 
                 setState(() {
-                  _opacity = 0.7;
+                  _opacity = 1;
                 });
               },
         child: Center(child: _buttonLabel(context)),

@@ -7,6 +7,7 @@ import 'package:english_wordle/services/apis/spell_service.dart';
 import 'package:english_wordle/services/apis/words_service.dart';
 import 'package:english_wordle/services/local_db/words_box.dart';
 import 'package:english_wordle/views/utils/audios.dart';
+import 'package:english_wordle/views/widgets/snackbar.dart';
 import 'package:english_wordle/views/widgets/winning_bottom_sheet.dart';
 import 'package:english_wordle/views/widgets/word_tile/word_tile.dart';
 import 'package:get/get.dart';
@@ -111,7 +112,8 @@ class WordleController extends GetxController {
     if (typedValues.isEmpty) return;
 
     if ((5 * (currentSection - 1) >= typedValues.length)) {
-      print('Previous session is not allowed');
+      // print('Previous session is not allowed');
+      SnackBarService.showSnackBar('Previous session is not allowed');
       return;
     }
     typedValues.removeLast();
@@ -127,7 +129,7 @@ class WordleController extends GetxController {
       _moveToTheNextSession();
     } else {
       shakeFirstFive();
-      showTopSnackBar('This is new');
+      SnackBarService.showSnackBar('Fill the letters and press ender');
     }
   }
 
@@ -199,15 +201,12 @@ class WordleController extends GetxController {
 
       String elementAtThatIndex =
           todaysWord.split('').elementAt(indexOfThatWord);
-      print('value: $value  $index');
 
       if (value == elementAtThatIndex) return WordTileType.green;
       return WordTileType.none;
     }
-    print('value: $value  $index sd');
 
     if (orangeIn(section).contains(value)) return WordTileType.orange;
-    print('value: $value  $index nd');
     return WordTileType.none;
   }
 
@@ -220,11 +219,13 @@ class WordleController extends GetxController {
       await Future.delayed(const Duration(milliseconds: 600));
       update([reBuildCardId(i.toString())]);
     }
+    _winnerBottomSheet();
   }
 
   void _onWordError() {
     shakeFirstFive();
-    print('Typed word is not exist in the dictnory');
+    // print('Typed word is not exist in the dictnory');
+    SnackBarService.showSnackBar('Typed word is not exist');
   }
 
   Future<void> getTodaysWord() async {
@@ -236,7 +237,7 @@ class WordleController extends GetxController {
       final todaysWord = await Get.find<WordsRepository>().getTodaysWord();
 
       todaysWord.either((e) {
-        print('Word handling has some error: ${e.error}');
+        SnackBarService.showSnackBar('Something went wrong please try again');
         isLoading = false;
         update([reBuildScreen]);
       }, _assignTodaysWord);
@@ -349,7 +350,6 @@ class WordleController extends GetxController {
     audioController = AudioController(audio: Audios.clickAudioGame);
     getTodaysWord().then((e) {
       getTypedValues();
-      print(isWinnedToday);
     });
   }
 }
