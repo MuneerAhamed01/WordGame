@@ -1,14 +1,17 @@
+import 'package:either_dart/either.dart';
+import 'package:english_wordle/models/error.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 
-class AuthRepository {
+class AuthService extends GetxService {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
   final FirebaseFirestore _firestore;
 
-  AuthRepository({
+  AuthService({
     FirebaseAuth? firebaseAuth,
     GoogleSignIn? googleSignIn,
     FirebaseFirestore? firestore,
@@ -49,7 +52,7 @@ class AuthRepository {
   }
 
   // Sign in with Google
-  Future<UserCredential> signInWithGoogle() async {
+  Future<Either<MyError, UserCredential>> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       final GoogleSignInAuthentication? googleAuth =
@@ -60,21 +63,21 @@ class AuthRepository {
         idToken: googleAuth?.idToken,
       );
 
-      return await _firebaseAuth.signInWithCredential(credential);
+      return Right(await _firebaseAuth.signInWithCredential(credential));
     } on PlatformException catch (e) {
-      throw Exception('Failed to sign in with Google: ${e.message}');
+      return Left(AuthError(authError: e.message));
     } on FirebaseAuthException catch (e) {
-      throw _handleFirebaseAuthException(e);
+      return Left(AuthError(authError: _handleFirebaseAuthException(e)));
     }
   }
 
-  Future<UserCredential> signInAnonymoslys() async {
+  Future<Either<MyError, UserCredential>> signInAnonymoslys() async {
     try {
-      return await _firebaseAuth.signInAnonymously();
+      return Right(await _firebaseAuth.signInAnonymously());
     } on PlatformException catch (e) {
-      throw Exception('Failed to sign in with Google: ${e.message}');
+      return Left(AuthError(authError: e.message));
     } on FirebaseAuthException catch (e) {
-      throw _handleFirebaseAuthException(e);
+      return Left(AuthError(authError: _handleFirebaseAuthException(e)));
     }
   }
 

@@ -46,4 +46,10 @@ mixin WordTileStateMixin on State<WordTile> {
     }
     super.didUpdateWidget(oldWidget);
   }
+
+  @override
+  void initState() {
+    _tileType = widget.tileType;
+    super.initState();
+  }
 }

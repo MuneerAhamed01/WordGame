@@ -29,6 +29,7 @@ dependencies:
   dictionaryx: ^0.3.5
   firebase_auth: ^4.16.0
   google_sign_in: ^6.2.1
+  dio: ^5.7.0
 
 dev_dependencies:
   flutter_test:

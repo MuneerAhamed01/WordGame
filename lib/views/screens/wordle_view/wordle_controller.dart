@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:dictionaryx/dictionary_reduced_sa.dart';
 import 'package:english_wordle/controllers/audio_controller.dart';
 import 'package:english_wordle/models/word_model.dart';
+import 'package:english_wordle/services/apis/spell_service.dart';
 import 'package:english_wordle/services/apis/words_service.dart';
 import 'package:english_wordle/services/local_db/words_box.dart';
 import 'package:english_wordle/views/utils/audios.dart';
@@ -35,6 +36,8 @@ class WordleController extends GetxController {
   bool isWinnedToday = false;
 
   late final AudioController audioController;
+
+  bool checkingWordIsCorrect = false;
 
 // include in the [todaysWord] but not available at the correct position
   final Map<int, List<String>> _orangeWords = {
@@ -88,10 +91,11 @@ class WordleController extends GetxController {
   }
 
   int currentSection = 1;
+
   void addTypedValue(String value) {
     if (isWinnedToday) return;
     if (typedValues.length == (5 * currentSection)) {
-      print('You have entered the 5th wordle please press enter');
+      // print('You have entered the 5th wordle please press enter');
       return;
     }
     typedValues.add(value);
@@ -126,14 +130,19 @@ class WordleController extends GetxController {
     }
   }
 
-  void _moveToTheNextSession() {
+  Future<void> _moveToTheNextSession() async {
     final value = typedValues
         .getRange(typedValues.length - 5, typedValues.length)
         .toList();
 
-    if (!dictnory.hasEntry(value.join().toLowerCase())) {
+    checkingWordIsCorrect = true;
+
+    final hasWord = await Get.find<SpellService>().spellCheck(value.join());
+    if (!hasWord) {
+      checkingWordIsCorrect = false;
       return _onWordError();
     }
+    checkingWordIsCorrect = false;
 
     if (value.join() == todaysWord) {
       isWinnedToday = true;
@@ -197,7 +206,7 @@ class WordleController extends GetxController {
     print('value: $value  $index sd');
 
     if (orangeIn(section).contains(value)) return WordTileType.orange;
-
+    print('value: $value  $index nd');
     return WordTileType.none;
   }
 
@@ -272,7 +281,7 @@ class WordleController extends GetxController {
     int session = 1;
 
     for (int i = 0; i < 5; i++) {
-      if (typedValues.length < endRange) break;
+      if (typedValues.length < (endRange - 1)) break;
       final word = typedValues.getRange(startRange, endRange).join('');
       if (word == todaysWord) {
         isWinnedToday = true;

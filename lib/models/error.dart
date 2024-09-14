@@ -13,3 +13,9 @@ class DatabaseError extends MyError {
     error = dbError;
   }
 }
+
+class AuthError extends MyError {
+  AuthError({required dynamic authError}) {
+    error = authError;
+  }
+}

@@ -36,7 +36,7 @@ class AuthScreen extends GetView<AuthController> {
               child: SizedBox(
                 height: 48,
                 child: AppButton(
-                  onTap: () {},
+                  onTap: controller.signUpWithGoogle,
                   label: 'Continue with google',
                 ),
               ),
