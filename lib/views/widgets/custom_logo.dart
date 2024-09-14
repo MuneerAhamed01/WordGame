@@ -97,7 +97,9 @@ class AnimatedGradientSquaresState extends State<AnimatedGradientSquares>
           builder: (context, child) {
             return Transform.translate(
               offset: Offset(0, -10 * _animations[index].value),
-              child: Container(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeInCirc,
                 width: widget.squareSize,
                 height: widget.squareSize,
                 margin: const EdgeInsets.all(2),

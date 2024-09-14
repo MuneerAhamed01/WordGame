@@ -68,6 +68,16 @@ class AuthRepository {
     }
   }
 
+  Future<UserCredential> signInAnonymoslys() async {
+    try {
+      return await _firebaseAuth.signInAnonymously();
+    } on PlatformException catch (e) {
+      throw Exception('Failed to sign in with Google: ${e.message}');
+    } on FirebaseAuthException catch (e) {
+      throw _handleFirebaseAuthException(e);
+    }
+  }
+
   // Send OTP
   Future<void> sendOTP({required String phoneNumber}) async {
     try {

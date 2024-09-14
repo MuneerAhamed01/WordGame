@@ -6,7 +6,6 @@ import 'package:english_wordle/services/routes/routes.dart';
 import 'package:english_wordle/themes/colors.dart';
 import 'package:english_wordle/themes/fonts.dart';
 import 'package:english_wordle/views/screens/auth/auth_screen.dart';
-import 'package:english_wordle/views/screens/wordle_view/wordle_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -36,7 +35,7 @@ class MyApp extends StatelessWidget {
       ),
       getPages: Routes().getGetXPages(),
       initialBinding: InitialBinding(),
-      initialRoute: WordleScreen.routeName,
+      initialRoute: AuthScreen.routeName,
     );
   }
 }
