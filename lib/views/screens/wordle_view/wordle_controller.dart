@@ -5,11 +5,15 @@ import 'package:english_wordle/controllers/audio_controller.dart';
 import 'package:english_wordle/models/word_model.dart';
 import 'package:english_wordle/services/apis/spell_service.dart';
 import 'package:english_wordle/services/apis/words_service.dart';
+import 'package:english_wordle/services/auth/auth_service.dart';
 import 'package:english_wordle/services/local_db/words_box.dart';
 import 'package:english_wordle/views/utils/audios.dart';
+import 'package:english_wordle/views/widgets/slidedown_dalog.dart';
 import 'package:english_wordle/views/widgets/snackbar.dart';
 import 'package:english_wordle/views/widgets/winning_bottom_sheet.dart';
 import 'package:english_wordle/views/widgets/word_tile/word_tile.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class WordleController extends GetxController {
@@ -20,6 +24,10 @@ class WordleController extends GetxController {
   static String get reBuildScreen => 'reBuildScreen';
 
   static String get reBuildIndicator => 'reBuildIndicator';
+
+  String? get username => Get.find<AuthService>().getCurrentUser?.displayName;
+
+  String? get profile => Get.find<AuthService>().getCurrentUser?.photoURL;
 
   WordTileType type = WordTileType.none;
 
@@ -219,6 +227,7 @@ class WordleController extends GetxController {
       await Future.delayed(const Duration(milliseconds: 600));
       update([reBuildCardId(i.toString())]);
     }
+    await Future.delayed(const Duration(milliseconds: 600));
     _winnerBottomSheet();
   }
 
@@ -333,8 +342,22 @@ class WordleController extends GetxController {
     return (0, 4);
   }
 
+  void showHint() {
+    showSlidingDialog(
+      title: 'You need to watch a 15 sec add for one hint',
+      onPressContinue: () {
+        Get.back();
+        // Show Ad
+        showSlidingDialog(
+          title: word?.hints.first ?? '',
+        );
+      },
+    );
+  }
+
   void _winnerBottomSheet() {
     Get.bottomSheet(
+      enterBottomSheetDuration: const Duration(milliseconds: 500),
       isScrollControlled: true,
       enableDrag: false,
       isDismissible: false,
@@ -349,7 +372,7 @@ class WordleController extends GetxController {
     super.onInit();
     audioController = AudioController(audio: Audios.clickAudioGame);
     getTodaysWord().then((e) {
-      // getTypedValues();
+      getTypedValues();
     });
   }
 }

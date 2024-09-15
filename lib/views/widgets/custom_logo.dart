@@ -1,18 +1,19 @@
 import 'dart:math';
 
+import 'package:english_wordle/views/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 enum WordTileType { green, none, orange }
 
-class MyColors {
-  static const Color green4 = Color(0xFF4CAF50);
-  static const Color green5 = Color(0xFF2E7D32);
-  static const Color gray5 = Color(0xFF9E9E9E);
-  static const Color gray6 = Color(0xFF757575);
-  static const Color orange4 = Color(0xFFFF9800);
-  static const Color orange5 = Color(0xFFF57C00);
-}
+// class MyColors {
+//   static const Color green4 = Color(0xFF4CAF50);
+//   static const Color green5 = Color(0xFF2E7D32);
+//   static const Color gray5 = Color(0xFF9E9E9E);
+//   static const Color gray6 = Color(0xFF757575);
+//   static const Color orange4 = Color(0xFFFF9800);
+//   static const Color orange5 = Color(0xFFF57C00);
+// }
 
 class AnimatedGradientSquares extends StatefulWidget {
   final int squareCount;

@@ -11,15 +11,16 @@ class SnackBarService {
   static void showSnackBar(
     String message, {
     Duration duration = const Duration(seconds: 2),
-    Color backgroundColor = Colors.black87,
-    Color textColor = Colors.white,
+    Color backgroundColor = Colors.white,
+    Color textColor = Colors.black,
   }) {
     if (messengerKey.currentState != null) {
       messengerKey.currentState!.showSnackBar(
         SnackBar(
           content: Text(
             message,
-            style: TextStyle(color: textColor),
+            style: TextStyle(
+                color: textColor, fontWeight: FontWeight.bold, fontSize: 16),
           ),
           duration: duration,
           backgroundColor: backgroundColor,
