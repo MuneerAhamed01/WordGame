@@ -349,7 +349,7 @@ class WordleController extends GetxController {
     super.onInit();
     audioController = AudioController(audio: Audios.clickAudioGame);
     getTodaysWord().then((e) {
-      getTypedValues();
+      // getTypedValues();
     });
   }
 }

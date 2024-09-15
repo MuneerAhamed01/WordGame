@@ -10,9 +10,9 @@
             "type": "dart",
             "args": [
                 "--dart-define",
-                "GEMINI_KEY=<KEY>",
+                "GEMINI_KEY=AIzaSyBAVaUzOCVEVArpwX0-aepltKRFpzLhcW0",
                 "--dart-define",
-                "GEMINI_KEY=<KEY>"
+                "WORD_KEY=3c7526466fmsh12073e87e5622ccp112687jsn2de525a88025"
             ]
         },
         {

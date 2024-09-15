@@ -1,3 +1,4 @@
+import 'package:english_wordle/views/screens/leaderboard/leaderboard_screen.dart';
 import 'package:english_wordle/views/screens/wordle_view/wordle_controller.dart';
 import 'package:english_wordle/views/utils/svgs.dart';
 import 'package:english_wordle/views/widgets/custom_keybord/custom_keybord.dart';
@@ -20,7 +21,12 @@ class WordleScreen extends GetView<WordleController> {
         //   padding: const EdgeInsets.only(left: 16, top: 6),
         //   child:
         // ),
-        leading: const Icon(Icons.menu_outlined),
+        leading: GestureDetector(
+          onTap: () {
+            Get.toNamed(LeaderboardScreen.routeName);
+          },
+          child: const Icon(Icons.menu_outlined),
+        ),
         title: const Text('WordSchool'),
         actions: [
           Text(
