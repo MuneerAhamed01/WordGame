@@ -1,5 +1,6 @@
 import 'package:english_wordle/services/auth/auth_service.dart';
 import 'package:english_wordle/views/screens/leaderboard/leaderboard_screen.dart';
+import 'package:english_wordle/views/screens/streaks/streak_screen.dart';
 import 'package:english_wordle/views/screens/wordle_view/wordle_controller.dart';
 import 'package:english_wordle/views/utils/svgs.dart';
 import 'package:english_wordle/views/widgets/custom_keybord/custom_keybord.dart';
@@ -56,7 +57,7 @@ class WordleScreen extends GetView<WordleController> {
   InkWell _buildAppbarLeading() {
     return InkWell(
       onTap: () {
-        Get.toNamed(LeaderboardScreen.routeName);
+        Get.toNamed(StreakScreen.routeName);
       },
       child: Padding(
         padding: const EdgeInsets.only(left: 16),

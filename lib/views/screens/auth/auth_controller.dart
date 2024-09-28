@@ -15,7 +15,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> signUpAnonymosly() async {
-    final authWithGoogle = await Get.find<AuthService>().signInAnonymoslys();
+    final authWithGoogle = await Get.find<AuthService>().signInAnonymously();
 
     authWithGoogle.fold((e) {}, _onSucessAuth);
   }

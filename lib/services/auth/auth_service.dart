@@ -71,7 +71,7 @@ class AuthService extends GetxService {
     }
   }
 
-  Future<Either<MyError, UserCredential>> signInAnonymoslys() async {
+  Future<Either<MyError, UserCredential>> signInAnonymously() async {
     try {
       return Right(await _firebaseAuth.signInAnonymously());
     } on PlatformException catch (e) {

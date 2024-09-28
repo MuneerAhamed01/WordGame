@@ -260,7 +260,7 @@ class WordleController extends GetxController {
   void _assignTodaysWord(List<WordModel> words) {
     Random random = Random();
 
-    final int value = random.nextInt(10);
+    final int value = random.nextInt(words.length);
 
     word = words[value];
 
@@ -343,16 +343,15 @@ class WordleController extends GetxController {
   }
 
   void showHint() {
-    showSlidingDialog(
-      title: 'You need to watch a 15 sec add for one hint',
-      onPressContinue: () {
-        Get.back();
-        // Show Ad
-        showSlidingDialog(
-          title: word?.hints.first ?? '',
-        );
-      },
-    );
+    // showSlidingDialog(
+    //   title: 'You need to watch a 15 sec add for one hint',
+    //   onPressContinue: () {
+    //     Get.back();
+    //     // Show Ad
+
+    //   },
+    // );
+    showSlidingDialog(title: word?.hints.first ?? '');
   }
 
   void _winnerBottomSheet() {
