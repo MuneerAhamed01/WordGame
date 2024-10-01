@@ -13,48 +13,56 @@ class AuthScreen extends GetView<AuthController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 12),
-            const AnimatedGradientSquares(
-              squareSize: 32,
-            ),
-            Text(
-              'WordSchool',
-              style: GoogleFonts.crimsonText(fontSize: 54, color: Colors.white),
-            ),
-            // const Spacer(),
-            Text(
-              'Start your day by brainstorming once :)',
-              style: GoogleFonts.crimsonText(fontSize: 16, color: Colors.white),
-            ),
-            const SizedBox(height: 50),
+        child: GetBuilder<AuthController>(
+          builder: (_) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 12),
+                const AnimatedGradientSquares(
+                  squareSize: 32,
+                ),
+                Text(
+                  'WordSchool',
+                  style: GoogleFonts.crimsonText(
+                      fontSize: 54, color: Colors.white),
+                ),
+                // const Spacer(),
+                Text(
+                  'Start your day by brainstorming once :)',
+                  style: GoogleFonts.crimsonText(
+                      fontSize: 16, color: Colors.white),
+                ),
+                const SizedBox(height: 50),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: SizedBox(
-                height: 48,
-                child: AppButton(
-                  onTap: controller.signUpWithGoogle,
-                  label: 'Continue with google',
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: SizedBox(
+                    height: 48,
+                    child: AppButton(
+                      onTap: controller.signUpWithGoogle,
+                      isLoading: controller.isLoadingGoogle,
+                      label: 'Continue with google',
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 24),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: SizedBox(
-                height: 48,
-                child: AppButton(
-                  onTap: () {},
-                  label: 'Sign up anonymosly',
-                  type: ButtonType.background,
+                const SizedBox(height: 24),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: SizedBox(
+                    height: 48,
+                    child: AppButton(
+                      onTap: controller.signUpAnonymosly,
+                      isLoading: controller.isLoadingAnonymously,
+                      label: 'Sign up anonymosly',
+                      type: ButtonType.background,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 32),
-          ],
+                const SizedBox(height: 32),
+              ],
+            );
+          },
         ),
       ),
     );

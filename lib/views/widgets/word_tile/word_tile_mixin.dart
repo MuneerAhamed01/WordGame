@@ -18,6 +18,9 @@ mixin WordTileStateMixin on State<WordTile> {
       ] else if (type == WordTileType.none) ...[
         MyColors.gray5,
         MyColors.gray6,
+      ] else if (type == WordTileType.error) ...[
+        Colors.red,
+        Colors.red.withOpacity(0.6),
       ] else ...[
         MyColors.orange4,
         MyColors.orange5,

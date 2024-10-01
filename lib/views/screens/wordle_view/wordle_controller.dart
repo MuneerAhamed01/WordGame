@@ -1,25 +1,26 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:dictionaryx/dictionary_reduced_sa.dart';
 import 'package:english_wordle/controllers/audio_controller.dart';
+import 'package:english_wordle/models/streak_model.dart';
 import 'package:english_wordle/models/word_model.dart';
 import 'package:english_wordle/services/apis/spell_service.dart';
 import 'package:english_wordle/services/apis/words_service.dart';
 import 'package:english_wordle/services/auth/auth_service.dart';
+import 'package:english_wordle/services/database/streak_repo.dart';
 import 'package:english_wordle/services/local_db/words_box.dart';
 import 'package:english_wordle/views/utils/audios.dart';
 import 'package:english_wordle/views/widgets/slidedown_dalog.dart';
 import 'package:english_wordle/views/widgets/snackbar.dart';
 import 'package:english_wordle/views/widgets/winning_bottom_sheet.dart';
 import 'package:english_wordle/views/widgets/word_tile/word_tile.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class WordleController extends GetxController {
   static String reBuildCardId(String id) => 'Rebuild_$id';
 
-  static String get reBuildKeyBord => 'reBuildKeyBord';
+  static String get reBuildKeyBoard => 'reBuildKeyBoard';
 
   static String get reBuildScreen => 'reBuildScreen';
 
@@ -28,6 +29,8 @@ class WordleController extends GetxController {
   String? get username => Get.find<AuthService>().getCurrentUser?.displayName;
 
   String? get profile => Get.find<AuthService>().getCurrentUser?.photoURL;
+
+  final StreakRepo _streakRepo = Get.find<StreakRepo>();
 
   WordTileType type = WordTileType.none;
 
@@ -48,6 +51,10 @@ class WordleController extends GetxController {
   late final AudioController audioController;
 
   bool checkingWordIsCorrect = false;
+
+  bool canPressEnter = true;
+
+  StreakModel? todayStreak;
 
 // include in the [todaysWord] but not available at the correct position
   final Map<int, List<String>> _orangeWords = {
@@ -130,14 +137,20 @@ class WordleController extends GetxController {
     update([reBuildCardId((typedValues.length).toString())]);
   }
 
-  void onPressEnter() {
+  Future<void> onPressEnter() async {
     if (isWinnedToday) return;
 
+    if (!canPressEnter) {
+      SnackBarService.showSnackBar('Please wait we are on process');
+    }
+
     if (typedValues.length == (5 * currentSection)) {
-      _moveToTheNextSession();
+      canPressEnter = false;
+      await _moveToTheNextSession();
+      canPressEnter = true;
     } else {
       shakeFirstFive();
-      SnackBarService.showSnackBar('Fill the letters and press ender');
+      SnackBarService.showSnackBar('Fill the letters and press enter');
     }
   }
 
@@ -159,46 +172,50 @@ class WordleController extends GetxController {
       isWinnedToday = true;
       // PERFOM THE WINNING ANOUNCEMENT
       _callWonTheGame(value.join());
+      unawaited(addWordToDb(value.join()));
     } else {
       _checkWithCurrentWord(value);
+      unawaited(addWordToDb(value.join()));
     }
   }
 
-  Future<void> _checkWithCurrentWord(List<String> wordFromTypledValues) async {
-    _addTheWords(wordFromTypledValues, currentSection);
+  Future<void> _checkWithCurrentWord(List<String> wordFromTypedValues) async {
+    _addTheWords(wordFromTypedValues, currentSection);
 
     int start = (currentSection - 1) * 5;
 
     int end = start + 5;
 
     for (int i = start; i < end; i++) {
-      await Future.delayed(const Duration(milliseconds: 600));
+      await Future.delayed(const Duration(milliseconds: 400));
+      listOfShakeItems[i]?.call();
+
       update([reBuildCardId(i.toString())]);
     }
 
     currentSection += 1;
     if (currentSection == 6) {
       // YOU CAN DO THE LOSS THE GAME OVER HERE
-      print('You loss word is $todaysWord');
+      _winnerBottomSheet();
     }
-    update([reBuildKeyBord, reBuildIndicator]);
+    update([reBuildKeyBoard, reBuildIndicator]);
   }
 
-  void _addTheWords(List<String> wordFromTypledValues,
+  void _addTheWords(List<String> wordFromTypedValues,
       [int currentSection = 0]) {
-    for (int i = 0; i < wordFromTypledValues.length; i++) {
-      if (todaysWord.contains(wordFromTypledValues[i])) {
+    for (int i = 0; i < wordFromTypedValues.length; i++) {
+      if (todaysWord.contains(wordFromTypedValues[i])) {
         final int indexOfTheWord = i;
 
         final valueAtTheIndex = todaysWord.split('')[indexOfTheWord];
 
-        if (valueAtTheIndex == wordFromTypledValues[i]) {
-          _greenWords[currentSection]?.add(wordFromTypledValues[i]);
+        if (valueAtTheIndex == wordFromTypedValues[i]) {
+          _greenWords[currentSection]?.add(wordFromTypedValues[i]);
         } else {
-          _orangeWords[currentSection]?.add(wordFromTypledValues[i]);
+          _orangeWords[currentSection]?.add(wordFromTypedValues[i]);
         }
       } else {
-        _disabledWords[currentSection]?.add(wordFromTypledValues[i]);
+        _disabledWords[currentSection]?.add(wordFromTypedValues[i]);
       }
     }
   }
@@ -272,19 +289,25 @@ class WordleController extends GetxController {
   }
 
   void showTopSnackBar(String message) {
-    print('ShowSnackbar');
-    // Get.showSnackbar(
-    //   Ge
-    // );
+    // print('ShowSnackbar');
+    // // Get.showSnackbar(
+    // //   Ge
+    // // );
   }
 
   Future<void> saveTypedValue() async {
     WordsBoxDB.instance.storeCurrentSataus(typedValues, currentSection);
   }
 
-  void getTypedValues() {
+  FutureOr<void> getTypedValues() async {
     typedValues = WordsBoxDB.instance.getTypedValues;
     currentSection = WordsBoxDB.instance.getCurrentSession;
+
+    if (typedValues.isEmpty) {
+      todayStreak = await _streakRepo.getStreakByDate(DateTime.now());
+      typedValues = todayStreak?.usedWordsOneByOneList ?? [];
+      currentSection = todayStreak?.currentSession ?? 1;
+    }
 
     int startRange = 0;
     int endRange = 5;
@@ -294,8 +317,8 @@ class WordleController extends GetxController {
     for (int i = 0; i < 5; i++) {
       if (typedValues.length < (endRange - 1)) break;
       final word = typedValues.getRange(startRange, endRange).join('');
-      if (word == todaysWord) {
-        isWinnedToday = true;
+      if (word == todaysWord || currentSection == 5) {
+        isWinnedToday = word == todaysWord;
         _winnerBottomSheet();
       }
       _addTheWords(
@@ -342,6 +365,40 @@ class WordleController extends GetxController {
     return (0, 4);
   }
 
+  Future<void> addWordToDb(String word) async {
+    todayStreak ??= await _streakRepo.getStreakByDate(DateTime.now());
+
+    if (todayStreak == null) {
+      await _streakRepo.addStreak(
+        StreakModel(
+          isWon: isWinnedToday,
+          date: DateTime.now(),
+          usedWord: [word],
+          word: todaysWord,
+        ),
+        currentSection,
+      );
+      todayStreak = StreakModel(
+        isWon: isWinnedToday,
+        date: DateTime.now(),
+        usedWord: [word],
+        word: todaysWord,
+      );
+    } else {
+      await _streakRepo.addStreak(
+        todayStreak!.copyWith(
+          isWon: isWinnedToday,
+          usedWord: [...todayStreak!.usedWord, word],
+        ),
+        currentSection,
+      );
+      todayStreak = todayStreak!.copyWith(
+        isWon: isWinnedToday,
+        usedWord: [...todayStreak!.usedWord, word],
+      );
+    }
+  }
+
   void showHint() {
     // showSlidingDialog(
     //   title: 'You need to watch a 15 sec add for one hint',
@@ -362,6 +419,7 @@ class WordleController extends GetxController {
       isDismissible: false,
       WinnerBottomSheet(
         todayWord: todaysWord,
+        isLost: !isWinnedToday,
       ),
     );
   }

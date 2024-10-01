@@ -2,6 +2,7 @@ import 'package:english_wordle/views/screens/auth/auth_bindings.dart';
 import 'package:english_wordle/views/screens/auth/auth_screen.dart';
 import 'package:english_wordle/views/screens/leaderboard/leaderboard_bindings.dart';
 import 'package:english_wordle/views/screens/leaderboard/leaderboard_screen.dart';
+import 'package:english_wordle/views/screens/settings/settings_screen.dart';
 import 'package:english_wordle/views/screens/streaks/streak_bindings.dart';
 import 'package:english_wordle/views/screens/streaks/streak_screen.dart';
 import 'package:english_wordle/views/screens/wordle_view/wordle_bindings.dart';
@@ -34,6 +35,12 @@ class Routes {
         page: () => const StreakScreen(),
         transition: Transition.fadeIn,
         binding: StreakBindings(),
+      ),
+      GetPage(
+        name: SettingsScreen.routeName,
+        page: () => const SettingsScreen(),
+        transition: Transition.fadeIn,
+        // binding: WordleBindings(),
       ),
       // GetPage(
       //   name: RoutesName.showcase,

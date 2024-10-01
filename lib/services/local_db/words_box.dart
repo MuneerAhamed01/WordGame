@@ -14,6 +14,10 @@ class WordsBoxDB {
     _wordBox = GetStorage('words');
   }
 
+  Future clearAll() async {
+    _wordBox.erase();
+  }
+
   Future<void> storeTodaysWord(WordModel word) async {
     await _wordBox.write(
       'todaysWord',
@@ -42,6 +46,10 @@ class WordsBoxDB {
     return null;
   }
 
+  clearTodayWord() {
+    _wordBox.remove('todaysWord');
+  }
+
   Future<void> storeCurrentSataus(List<String> typedValues, int session) async {
     await _wordBox.write('typedValues', {
       'date': DateTime.now().toString(),
@@ -66,6 +74,10 @@ class WordsBoxDB {
     }
 
     return [];
+  }
+
+  void clearTypedValuesOfToday() {
+    _wordBox.remove('typedValues');
   }
 
   int get getCurrentSession {

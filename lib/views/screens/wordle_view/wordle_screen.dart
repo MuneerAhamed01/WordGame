@@ -1,5 +1,4 @@
-import 'package:english_wordle/services/auth/auth_service.dart';
-import 'package:english_wordle/views/screens/leaderboard/leaderboard_screen.dart';
+import 'package:english_wordle/services/database/streak_repo.dart';
 import 'package:english_wordle/views/screens/streaks/streak_screen.dart';
 import 'package:english_wordle/views/screens/wordle_view/wordle_controller.dart';
 import 'package:english_wordle/views/utils/svgs.dart';
@@ -25,7 +24,7 @@ class WordleScreen extends GetView<WordleController> {
         title: const Text('WordSchool'),
         actions: [
           Text(
-            '1',
+            Get.find<StreakRepo>().streakOfUser?.streakCount.toString() ?? '0',
             style: Get.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
               fontSize: 18,
@@ -167,7 +166,7 @@ class WordleScreen extends GetView<WordleController> {
         ),
 
         GetBuilder<WordleController>(
-          id: WordleController.reBuildKeyBord,
+          id: WordleController.reBuildKeyBoard,
           builder: (_) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),

@@ -1,5 +1,6 @@
 import 'package:either_dart/either.dart';
 import 'package:english_wordle/models/error.dart';
+import 'package:english_wordle/services/local_db/words_box.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -68,6 +69,8 @@ class AuthService extends GetxService {
       return Left(AuthError(authError: e.message));
     } on FirebaseAuthException catch (e) {
       return Left(AuthError(authError: _handleFirebaseAuthException(e)));
+    } catch (e) {
+      return Left(AuthError(authError: e.toString()));
     }
   }
 
@@ -126,6 +129,7 @@ class AuthService extends GetxService {
   // Sign out
   Future<void> signOut() async {
     await Future.wait([
+      WordsBoxDB.instance.clearAll(),
       _firebaseAuth.signOut(),
       _googleSignIn.signOut(),
     ]);

@@ -3,6 +3,7 @@ import 'package:english_wordle/services/apis/gemeni_service.dart';
 import 'package:english_wordle/services/apis/spell_service.dart';
 import 'package:english_wordle/services/apis/words_service.dart';
 import 'package:english_wordle/services/auth/auth_service.dart';
+import 'package:english_wordle/services/database/streak_repo.dart';
 import 'package:english_wordle/services/local_db/words_box.dart';
 import 'package:english_wordle/services/routes/routes.dart';
 import 'package:english_wordle/themes/colors.dart';
@@ -23,9 +24,15 @@ Future<void> main() async {
 
   await WordsBoxDB.instance.initBox();
 
+  // WordsBoxDB.instance.clearTodayWord();
+  // WordsBoxDB.instance.clearTypedValuesOfToday();
+
   final user = FirebaseAuth.instance.currentUser;
 
   // print(user?.displayName);
+  // if (user != null) {
+  await Get.putAsync(StreakRepo().init, permanent: true);
+  // }
 
   runApp(MyApp(user: user));
 }
@@ -41,6 +48,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       scaffoldMessengerKey: SnackBarService.messengerKey,
       title: 'Wordle Game',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: MyColorScheme.dark(),
         useMaterial3: true,
@@ -56,7 +64,7 @@ class MyApp extends StatelessWidget {
 
 class InitialBinding extends Bindings {
   @override
-  void dependencies() {
+  void dependencies() async {
     Get.put(GemeniService());
     Get.put(AuthService());
     Get.put(WordsRepository());

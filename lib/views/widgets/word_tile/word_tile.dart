@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 
 part 'word_tile_mixin.dart';
 
-enum WordTileType { green, orange, none }
+enum WordTileType { green, orange, none, error }
 
 class WordTile extends StatefulWidget {
   const WordTile({
