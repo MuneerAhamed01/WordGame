@@ -135,6 +135,12 @@ class AuthService extends GetxService {
     ]);
   }
 
+  Future<void> deleteAccount() async {
+    await _googleSignIn.signOut();
+    await WordsBoxDB.instance.clearAll();
+    await FirebaseAuth.instance.currentUser?.delete();
+  }
+
   // Get current user
   User? get getCurrentUser {
     return _firebaseAuth.currentUser;

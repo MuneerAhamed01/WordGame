@@ -39,7 +39,10 @@ class SettingsScreen extends StatelessWidget {
               // _showConfirmationDialog(context, 'Delete Account');
               showSlidingDialog(
                 title: "Are you sure you want to delete your account?",
-                onPressContinue: () {},
+                onPressContinue: () {
+                  Get.find<AuthService>().deleteAccount();
+                  Get.offAllNamed(AuthScreen.routeName);
+                },
               );
             },
           ),

@@ -4,6 +4,7 @@ import 'package:english_wordle/views/widgets/custom_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AuthScreen extends GetView<AuthController> {
   static const String routeName = '/auth';
@@ -65,6 +66,34 @@ class AuthScreen extends GetView<AuthController> {
           },
         ),
       ),
+      bottomSheet: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: GestureDetector(
+              onTap: () {
+                _launchUrl('https://sites.google.com/view/wordschool/home');
+              },
+              child: const Text(
+                'By continue you are accepting our privacy policy. Click here to see privacy policy',
+                style: TextStyle(
+                  color: Colors.blue,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            
+            ),
+          ),
+          const SizedBox(height: 30)
+        ],
+      ),
     );
   }
+  Future<void> _launchUrl(String url) async {
+final myurl = Uri.parse(url);
+  if (!await launchUrl(myurl)) {
+    throw Exception('Could not launch $myurl');
+  }
+}
 }
