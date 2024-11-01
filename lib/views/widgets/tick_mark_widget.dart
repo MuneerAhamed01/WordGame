@@ -8,13 +8,13 @@ class AnimatedCheckmarkAvatar extends StatefulWidget {
   final Duration zoomDuration;
 
   const AnimatedCheckmarkAvatar({
-    Key? key,
+    super.key,
     this.size = 100.0,
     this.checkmarkColor = Colors.white,
     this.backgroundColor = Colors.purple,
     this.checkmarkDuration = const Duration(milliseconds: 1000),
     this.zoomDuration = const Duration(milliseconds: 500),
-  }) : super(key: key);
+  });
 
   @override
   _AnimatedCheckmarkAvatarState createState() =>

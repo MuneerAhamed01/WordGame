@@ -1,8 +1,8 @@
+import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:english_wordle/services/auth/auth_service.dart';
 import 'package:english_wordle/services/database/streak_repo.dart';
 import 'package:english_wordle/views/screens/wordle_view/wordle_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
 
 class AuthController extends GetxController {
   bool isLoadingGoogle = false;
@@ -13,7 +13,9 @@ class AuthController extends GetxController {
     update();
     final authWithGoogle = await Get.find<AuthService>().signInWithGoogle();
 
-    await authWithGoogle.fold((e) {}, _onSucessAuth);
+    await authWithGoogle.fold((e) {
+      print(e);
+    }, _onSucessAuth);
     isLoadingGoogle = false;
     update();
   }

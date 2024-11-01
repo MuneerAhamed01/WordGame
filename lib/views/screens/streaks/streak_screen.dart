@@ -24,7 +24,7 @@ class StreakScreen extends GetView<StreakController> {
             onPressed: () {
               Get.toNamed(SettingsScreen.routeName);
             },
-            icon: Icon(Icons.settings_outlined),
+            icon: const Icon(Icons.settings_outlined),
           )
         ],
       ),
@@ -151,10 +151,10 @@ class WeekSelector extends StatefulWidget {
   final Function(DateTime) onWeekSelected;
 
   const WeekSelector({
-    Key? key,
+    super.key,
     required this.onWeekSelected,
     required this.initalselectedDate,
-  }) : super(key: key);
+  });
 
   final DateTime initalselectedDate;
 

@@ -1,6 +1,5 @@
 import 'package:english_wordle/views/screens/streaks/streak_screen.dart';
 import 'package:english_wordle/views/widgets/button.dart';
-import 'package:english_wordle/views/widgets/snackbar.dart';
 import 'package:english_wordle/views/widgets/tick_mark_widget.dart';
 import 'package:english_wordle/views/widgets/word_tile/word_tile.dart';
 import 'package:flutter/material.dart';

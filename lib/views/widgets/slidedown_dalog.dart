@@ -1,7 +1,6 @@
 import 'package:english_wordle/views/utils/colors.dart';
 import 'package:english_wordle/views/widgets/button.dart';
 import 'package:english_wordle/views/widgets/custom_logo.dart';
-import 'package:english_wordle/views/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

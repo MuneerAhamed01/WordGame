@@ -1,21 +1,20 @@
-import 'dart:async';
 import 'dart:math';
-
-import 'package:dictionaryx/dictionary_reduced_sa.dart';
-import 'package:english_wordle/controllers/audio_controller.dart';
-import 'package:english_wordle/models/streak_model.dart';
+import 'dart:async';
+import 'package:get/get.dart';
 import 'package:english_wordle/models/word_model.dart';
+import 'package:dictionaryx/dictionary_reduced_sa.dart';
+import 'package:english_wordle/views/utils/audios.dart';
+import 'package:english_wordle/models/streak_model.dart';
+import 'package:english_wordle/views/widgets/snackbar.dart';
+import 'package:english_wordle/services/auth/auth_service.dart';
 import 'package:english_wordle/services/apis/spell_service.dart';
 import 'package:english_wordle/services/apis/words_service.dart';
-import 'package:english_wordle/services/auth/auth_service.dart';
-import 'package:english_wordle/services/database/streak_repo.dart';
 import 'package:english_wordle/services/local_db/words_box.dart';
-import 'package:english_wordle/views/utils/audios.dart';
+import 'package:english_wordle/controllers/audio_controller.dart';
+import 'package:english_wordle/services/database/streak_repo.dart';
 import 'package:english_wordle/views/widgets/slidedown_dalog.dart';
-import 'package:english_wordle/views/widgets/snackbar.dart';
-import 'package:english_wordle/views/widgets/winning_bottom_sheet.dart';
 import 'package:english_wordle/views/widgets/word_tile/word_tile.dart';
-import 'package:get/get.dart';
+import 'package:english_wordle/views/widgets/winning_bottom_sheet.dart';
 
 class WordleController extends GetxController {
   static String reBuildCardId(String id) => 'Rebuild_$id';
@@ -317,7 +316,8 @@ class WordleController extends GetxController {
     for (int i = 0; i < 5; i++) {
       if (typedValues.length < (endRange - 1)) break;
       final word = typedValues.getRange(startRange, endRange).join('');
-      if (word == todaysWord || currentSection == 5) {
+      if (word == todaysWord ||
+          (currentSection == 5 && typedValues.length >= 25)) {
         isWinnedToday = word == todaysWord;
         _winnerBottomSheet();
       }

@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:english_wordle/models/streak_model.dart';
-import 'package:english_wordle/models/user_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:english_wordle/models/user_model.dart';
+import 'package:english_wordle/models/streak_model.dart';
 
 class StreakRepo extends GetxService {
   CollectionReference<Map<String, dynamic>> get _streakCollection {
@@ -23,7 +23,7 @@ class StreakRepo extends GetxService {
       final id = DateFormat('yyyy-MM-dd').format(streak.date);
       await _streakCollection.doc(id).set(streak.toMap());
 
-      if (currentSection == 5) {
+      if (currentSection == 5 || streak.isWon) {
         if (streak.isWon) {
           streakOfUser = streakOfUser!
               .copyWith(streakCount: streakOfUser!.streakCount + 1);

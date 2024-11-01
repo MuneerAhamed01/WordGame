@@ -1,7 +1,7 @@
-import 'package:english_wordle/controllers/audio_controller.dart';
-import 'package:english_wordle/views/utils/colors.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:english_wordle/views/utils/colors.dart';
+import 'package:english_wordle/controllers/audio_controller.dart';
 
 part 'custom_keybord_helper.dart';
 
@@ -108,7 +108,7 @@ class _CustomKeyboardState extends State<CustomKeyboard>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildWideButton('Enter', widget.onEnterPressed),
-            _buildWideButton('⌫', widget.onBackspacePressed),
+            _buildWideButton('Clear', widget.onBackspacePressed),
           ],
         ),
       ],

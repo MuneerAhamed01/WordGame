@@ -8,12 +8,29 @@ import 'package:english_wordle/services/database/words_db.dart';
 import 'package:get/get.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
+enum Difficulty { high, medium, low }
+
+getDifficultyString(Difficulty difficulty) {
+  switch (difficulty) {
+    case Difficulty.high:
+      return 'HIGH';
+
+    case Difficulty.medium:
+      return "MEDIUM";
+
+    case Difficulty.low:
+      return 'LOW';
+    default:
+      return Difficulty.high;
+  }
+}
+
 class GemeniService extends GetxService {
   late final GenerativeModel geminiModel;
 
   Future<Either<MyError, List<WordModel>>> getMyWord({
-    String wordDiff = 'HIGH',
-    String hintDiff = "HIGH",
+    Difficulty wordDiff = Difficulty.high,
+    Difficulty hintDiff = Difficulty.high,
     List<String> ignoreWord = const [],
   }) async {
     try {
@@ -37,8 +54,8 @@ The response should can convert to dart jsonDecode(response)
 Somtimes it gives FormatException Make sure it is not
 criterial 
 // WE HAVE THE OPTIONS HIGH,LOW,MEDIUM
-Word difficulty: $wordDiff
-  HINT DIFFICULYT: $hintDiff,
+Word difficulty: ${getDifficultyString(wordDiff)}
+  HINT DIFFICULYT: ${getDifficultyString(hintDiff)},
   IGONRE THIS WORDS: ${ignoreWord.join(',')}
   ''';
       final response =

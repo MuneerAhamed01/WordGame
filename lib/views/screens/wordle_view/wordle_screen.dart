@@ -1,14 +1,14 @@
-import 'package:english_wordle/services/database/streak_repo.dart';
-import 'package:english_wordle/views/screens/streaks/streak_screen.dart';
-import 'package:english_wordle/views/screens/wordle_view/wordle_controller.dart';
-import 'package:english_wordle/views/utils/svgs.dart';
-import 'package:english_wordle/views/widgets/custom_keybord/custom_keybord.dart';
-import 'package:english_wordle/views/widgets/hint_bulb.dart';
-import 'package:english_wordle/views/widgets/shimmer_widget.dart';
-import 'package:english_wordle/views/widgets/word_tile/word_tile.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
+import 'package:english_wordle/views/utils/svgs.dart';
+import 'package:english_wordle/views/widgets/hint_bulb.dart';
+import 'package:english_wordle/views/widgets/shimmer_widget.dart';
+import 'package:english_wordle/services/database/streak_repo.dart';
+import 'package:english_wordle/views/widgets/word_tile/word_tile.dart';
+import 'package:english_wordle/views/screens/streaks/streak_screen.dart';
+import 'package:english_wordle/views/screens/wordle_view/wordle_controller.dart';
+import 'package:english_wordle/views/widgets/custom_keybord/custom_keybord.dart';
 
 class WordleScreen extends GetView<WordleController> {
   const WordleScreen({super.key});
@@ -169,7 +169,7 @@ class WordleScreen extends GetView<WordleController> {
           id: WordleController.reBuildKeyBoard,
           builder: (_) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
               child: CustomKeyboard(
                 controller: controller.audioController,
                 onKeyPressed: controller.addTypedValue,

@@ -16,21 +16,21 @@ class LeaderboardScreen extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25),
+              padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(
                       child: Transform.translate(
-                          offset: Offset(0, 40),
-                          child: LeaderboardProfile(
+                          offset: const Offset(0, 40),
+                          child: const LeaderboardProfile(
                             rank: "2",
                             name: 'Meghan Jes...',
                             points: '40',
                             imageUrl:
                                 'https://img.freepik.com/premium-photo/young-woman-profile-black-hoodie-sweatshirt-dark-black-background_164357-12162.jpg',
                           ))),
-                  Expanded(
+                  const Expanded(
                       child: LeaderboardProfile(
                     rank: "1",
                     name: 'Bryan Wolf',
@@ -40,8 +40,8 @@ class LeaderboardScreen extends StatelessWidget {
                   )),
                   Expanded(
                       child: Transform.translate(
-                          offset: Offset(0, 40),
-                          child: LeaderboardProfile(
+                          offset: const Offset(0, 40),
+                          child: const LeaderboardProfile(
                             name: 'Alex Turner',
                             points: '38',
                             rank: "3",
@@ -77,17 +77,17 @@ class LeaderboardProfile extends StatelessWidget {
       children: [
         _buildCircleAvatar(),
         Padding(
-          padding: EdgeInsets.only(top: 20),
+          padding: const EdgeInsets.only(top: 20),
           child: Text(
             name,
-            style: TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.white),
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 5),
+          padding: const EdgeInsets.only(top: 5),
           child: Text(
-            points + " pts",
-            style: TextStyle(color: Colors.white),
+            "$points pts",
+            style: const TextStyle(color: Colors.white),
           ),
         ),
       ],
@@ -119,7 +119,7 @@ class LeaderboardProfile extends StatelessWidget {
               child: Center(
                 child: Text(
                   rank,
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
               ),
             ))

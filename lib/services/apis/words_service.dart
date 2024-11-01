@@ -11,8 +11,8 @@ class WordsRepository extends GetxService {
   final WordsDb _wordsDb = WordsDb.instance;
 
   Future<Either<MyError, List<WordModel>>> getTodaysWord({
-    String wordDiff = 'MEDIUM',
-    String hintDiff = "MEDIUM",
+    Difficulty wordDiff = Difficulty.high,
+    Difficulty hintDiff = Difficulty.high,
   }) async {
     final isEmpty = await _wordsDb.todayIsEmpty;
 
